@@ -1,11 +1,15 @@
 <?php
+include '../includes/start_session.php'; // Inclua a inicialização da sessão aqui
 include '../includes/config.php';
 include '../includes/functions.php';
-include '../includes/header.php';
-include '../includes/start_session.php';
-// Busca todos os produtos
-$result = $conn->query("SELECT * FROM produtos");
+include '../includes/header.php'; // Inclua o cabeçalho
+
+// Consulta os produtos
+$sql = "SELECT * FROM produtos";
+$result = $conn->query($sql);
+$produtos = $result->fetch_all(MYSQLI_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,22 +19,23 @@ $result = $conn->query("SELECT * FROM produtos");
     <title>Início</title>
 </head>
 <body>
-    
     <main>
-        <h1>Produtos</h1>
-        <ul>
-            <?php while ($produto = $result->fetch_assoc()): ?>
-                <li>
-                    <h2><?php echo htmlspecialchars($produto['nome']); ?></h2>
-                    <p><?php echo htmlspecialchars($produto['descricao']); ?></p>
-                    <p>Preço: R$ <?php echo htmlspecialchars($produto['preco']); ?></p>
-                    <?php if ($produto['imagem']): ?>
-                        <img src="../uploads/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>" style="max-width: 200px;">
+        <h1>Bem-vindo à Nossa Loja</h1>
+        <div class="product-container">
+            <?php foreach ($produtos as $produto): ?>
+                <div class="product-card">
+                    <?php if (!empty($produto['imagem'])): ?>
+                        <img src="../uploads/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="Imagem do Produto">
                     <?php endif; ?>
-                    <a href="edit_product.php?id=<?php echo $produto['id']; ?>">Editar</a>
-                </li>
-            <?php endwhile; ?>
-        </ul>
+                    <div class="info">
+                        <h2><?php echo htmlspecialchars($produto['nome']); ?></h2>
+                        <p><?php echo htmlspecialchars($produto['descricao']); ?></p>
+                        <p>R$ <?php echo htmlspecialchars(number_format($produto['preco'], 2, ',', '.')); ?></p>
+                        <a href="edit_product.php?id=<?php echo htmlspecialchars($produto['id']); ?>" class="btn-edit">Editar</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </main>
 </body>
 </html>

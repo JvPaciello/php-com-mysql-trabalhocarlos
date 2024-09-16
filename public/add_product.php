@@ -44,12 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Adicionar Produto</title>
 </head>
 <body>
-    <header>
-        <a href="index.php">Início</a>
-        <a href="login.php">Login</a>
-        <a href="register.php">Cadastro</a>
-        <a href="add_product.php">Adicionar Produto</a>
-    </header>
     <main>
         <h1>Adicionar Produto</h1>
         <form method="post" enctype="multipart/form-data">
