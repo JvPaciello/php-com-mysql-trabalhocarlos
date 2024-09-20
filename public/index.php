@@ -1,4 +1,5 @@
 <?php
+
 include '../includes/start_session.php'; // Inclua a inicialização da sessão aqui
 include '../includes/config.php';
 include '../includes/functions.php';
@@ -19,6 +20,9 @@ $produtos = $result->fetch_all(MYSQLI_ASSOC);
     <title>Início</title>
 </head>
 <body>
+    <!-- Botão de Filtro no canto superior esquerdo -->
+    <a href="search_products.php" class="btn-filter" title="Filtrar Produtos">Filtrar Produtos</a>
+
     <main>
         <h1>Bem-vindo à Nossa Loja</h1>
         <div class="product-container">
@@ -30,6 +34,8 @@ $produtos = $result->fetch_all(MYSQLI_ASSOC);
                     <div class="info">
                         <h2><?php echo htmlspecialchars($produto['nome']); ?></h2>
                         <p><?php echo htmlspecialchars($produto['descricao']); ?></p>
+                        <p>Fabricante: <?php echo htmlspecialchars($produto['fabricante']); ?></p>
+                        <p>Estoque: <?php echo htmlspecialchars($produto['estoque']); ?></p>
                         <p>R$ <?php echo htmlspecialchars(number_format($produto['preco'], 2, ',', '.')); ?></p>
                         <a href="edit_product.php?id=<?php echo htmlspecialchars($produto['id']); ?>" class="btn-edit">Editar</a>
                     </div>

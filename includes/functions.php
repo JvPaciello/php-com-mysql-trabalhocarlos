@@ -35,23 +35,36 @@ function adicionar_produto($nome, $descricao, $preco, $imagem) {
     }
     $stmt->bind_param("ssis", $nome, $descricao, $preco, $imagem);
     return $stmt->execute();
+
+
+    // Debugging log
+    error_log("Tentativa de adicionar produto: $nome, $descricao, $preco, $imagem, $estoque, $fabricante");
+
+    $stmt->bind_param("ssdiss", $nome, $descricao, $preco, $imagem, $estoque, $fabricante);
+    
+    if (!$stmt->execute()) {
+        error_log("Erro ao adicionar produto: " . $stmt->error);
+        return false;
+    }
+
+    return true;
 }
 
 // Função para editar produto
-function editar_produto($id, $nome, $descricao, $preco, $imagem) {
+function editar_produto($id, $nome, $descricao, $preco, $imagem, $estoque, $fabricante) {
     global $conn;
     if ($imagem) {
-        $stmt = $conn->prepare("UPDATE produtos SET nome = ?, descricao = ?, preco = ?, imagem = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE produtos SET nome = ?, descricao = ?, preco = ?, imagem = ?, estoque = ?, fabricante = ? WHERE id = ?");
         if ($stmt === false) {
             die('Erro na preparação da consulta: ' . $conn->error);
         }
-        $stmt->bind_param("ssisi", $nome, $descricao, $preco, $imagem, $id);
+        $stmt->bind_param("ssdissi", $nome, $descricao, $preco, $imagem, $estoque, $fabricante, $id);
     } else {
-        $stmt = $conn->prepare("UPDATE produtos SET nome = ?, descricao = ?, preco = ? WHERE id = ?");
+        $stmt = $conn->prepare("UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ?, fabricante = ? WHERE id = ?");
         if ($stmt === false) {
             die('Erro na preparação da consulta: ' . $conn->error);
         }
-        $stmt->bind_param("ssii", $nome, $descricao, $preco, $id);
+        $stmt->bind_param("ssissi", $nome, $descricao, $preco, $estoque, $fabricante, $id);
     }
     return $stmt->execute();
 }
